@@ -6,13 +6,15 @@
 
 class TodoList : public TodoListInterface {
     private:
-        ////Data fields
-        std::string _day;
-        std::string _task;
+        //Data fields
+        std::string _day, _task;
 
     public:
+        //Contructors
+        TodoList() {}
+        ~TodoList() {}
+
         //Methods
-        TodoList(std::string day, std::string task);
         void add(std::string _duedate, std::string _task);
         int remove(std::string _task);
         void printTodoList();
