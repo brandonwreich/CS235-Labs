@@ -51,9 +51,9 @@ int main(int argc, char *argv[]) {
     std::list<std::string> lst;
     std::map<std::list<std::string>, std::vector<std::string> > wordmap;
     std::list<std::string> state;
-
+    std::string filename = argv[1];
     std::string next_line;
-    std::ifstream in(argv[1]);
+    std::ifstream in(filename + ".txt");
     int M = 2;
 
     // Read to end of file
@@ -80,8 +80,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    write_set_to_file(unique, argv[1]);
-    write_vector_to_file(tokens, argv[1]);
+    write_set_to_file(unique, filename);
+    write_vector_to_file(tokens, filename);
 
     std::cout << "Numnber of words: " << tokens.size() << std::endl;
     std::cout << "Number of unique words: " << unique.size() << std::endl;
