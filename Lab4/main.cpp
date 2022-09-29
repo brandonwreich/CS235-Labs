@@ -9,6 +9,9 @@ int main(int argc, char *argv[]) {
 
     std::cout << pathptr->toString();
 
+    pathptr->solveMaze();
+    pathptr->toString();
+
 
     return 0;
 }

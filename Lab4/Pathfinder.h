@@ -13,9 +13,9 @@
 const int DEPTH_SIZE = 5;
 const int ROW_SIZE = 5;
 const int COLUMN_SIZE = 5;
-const int BACKGROUND = 1;
+const int OPENING = 1;
 const int WALL = 0;
-const int TEMPORARY = 2; // Used to show this path has been explored
+const int DEADEND = 2; 
 const int PATH = 3;
 
 class Pathfinder : public PathfinderInterface {
@@ -31,7 +31,7 @@ public:
     std::vector<std::string> solveMaze();
 
 protected:
-    bool findMazePath(int grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE], int r, int c);
+    bool findMazePath(int grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE], int depth, int row, int column);
     int maze_grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE];
     std::vector<std::string> solution;
 };
