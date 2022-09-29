@@ -21,7 +21,7 @@ const int PATH = 3;
 class Pathfinder : public PathfinderInterface {
 public:
     // Constructors
-    Pathfinder() {}
+    Pathfinder();
     ~Pathfinder() {}
 
     // Member functions
@@ -29,6 +29,7 @@ public:
     void createRandomMaze();
     bool importMaze(std::string file_name);
     std::vector<std::string> solveMaze();
+    bool checkImport(std::string file_name);
 
 protected:
     bool findMazePath(int grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE], int depth, int row, int column);

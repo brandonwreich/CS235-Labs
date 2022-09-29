@@ -1,5 +1,22 @@
 #include "Pathfinder.h"
 
+Pathfinder::Pathfinder() {
+    // Iterate through depth
+    for (int depth = 0; depth < DEPTH_SIZE; depth++)
+    {
+        // Iterate through rows
+        for (int row = 0; row < ROW_SIZE; row++)
+        {
+            // Iterate through columns
+            for (int column = 0; column < COLUMN_SIZE; column++)
+            {
+                // Print maze
+                maze_grid[depth][row][column] = 1;
+            }
+        }
+    }
+}
+
 std::string Pathfinder::toString() const
 {
     // Declare variables
@@ -63,28 +80,35 @@ bool Pathfinder::importMaze(std::string file_name)
     // If file is open
     if (file.is_open())
     {
-        // Iterate through depth
-        for (int depth = 0; depth < DEPTH_SIZE; depth++)
+        if (checkImport(file_name))
         {
-            // Iterate through rows
-            for (int row = 0; row < ROW_SIZE; row++)
+            // Iterate through depth
+            for (int depth = 0; depth < DEPTH_SIZE; depth++)
             {
-                // Read line
-                getline(file, line);
-                std::stringstream ss(line);
-
-                // Iterate through columns
-                for (int column = 0; column < COLUMN_SIZE; column++)
+                // Iterate through rows
+                for (int row = 0; row < ROW_SIZE; row++)
                 {
-                    // Fill grid
-                    ss >> value;
-                    std::cout << "[" << depth << "][" << row << "][" << column << "]=" << value << std::endl;
-                    maze_grid[depth][row][column] = value;
-                }
-            }
+                    // Read line
+                    getline(file, line);
+                    std::stringstream ss(line);
 
-            // Skip next line
-            getline(file, line);
+                    // Iterate through columns
+                    for (int column = 0; column < COLUMN_SIZE; column++)
+                    {
+                        // Fill grid
+                        ss >> value;
+                        std::cout << "[" << depth << "][" << row << "][" << column << "]=" << value << std::endl;
+                        maze_grid[depth][row][column] = value;
+                    }
+                }
+
+                // Skip next line
+                getline(file, line);
+            }
+        }
+        else
+        {
+            std::cout << "Not a valid file" << std::endl;
         }
     }
     else
@@ -171,6 +195,69 @@ bool Pathfinder::findMazePath(int grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE], int d
 
             return false;
         }
+    }
+}
+
+bool Pathfinder::checkImport(std::string file_name)
+{
+    // Delcare variables
+    std::ifstream file(file_name.c_str());
+    std::string line;
+    int value;
+    int count = 0;
+
+    // If file is open
+    if (file.is_open())
+    {
+        // Iterate through depth
+        for (int depth = 0; depth < DEPTH_SIZE; depth++)
+        {
+            // Iterate through rows
+            for (int row = 0; row < ROW_SIZE; row++)
+            {
+                // Read line
+                getline(file, line);
+                std::stringstream ss(line);
+
+                // Iterate through columns
+                for (int column = 0; column < COLUMN_SIZE; column++)
+                {
+                    // Fill grid
+                    ss >> value;
+
+                    // If there are more than 125 cells
+                    if (count >= 125)
+                    {
+                        std::cout << "Wrong" << std::endl;
+                        return false;
+
+                    
+                    }
+                    // If value doesn't equal "1" or "0"
+                    else if ((int) value != 0 && (int) value != 1)
+                    {
+
+                        std::cout << "Wrong" << std::endl;
+                        return false;
+
+                        
+                    }
+
+                    // Increase count
+                    count++;
+                }
+            }
+
+            // Skip next line
+            getline(file, line);
+        }
+    }
+    else
+    {
+        // Print error message
+        std::cout << file_name << " failed to open" << std::endl;
+
+        return false;
     }
 
     return true;
