@@ -10,6 +10,7 @@
 #include <sstream>
 
 // Global Variables
+const int DEPTH_SIZE = 5;
 const int ROW_SIZE = 5;
 const int COLUMN_SIZE = 5;
 const int BACKGROUND = 1;
@@ -24,13 +25,13 @@ public:
     ~Pathfinder() {}
 
     // Member functions
-    std::string toString();
+    std::string toString() const;
     void createRandomMaze();
     bool importMaze(std::string file_name);
     std::vector<std::string> solveMaze();
 
 protected:
-    bool findMazePath(int grid[ROW_SIZE][COLUMN_SIZE], int r, int c);
-    int maze_grid[ROW_SIZE][COLUMN_SIZE];
+    bool findMazePath(int grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE], int r, int c);
+    int maze_grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE];
     std::vector<std::string> solution;
 };
