@@ -1,16 +1,15 @@
 #include "Pathfinder.h"
 
-Pathfinder::Pathfinder() {
-    // Iterate through depth
+Pathfinder::Pathfinder()
+{
+    srand(time(NULL));
+
     for (int depth = 0; depth < DEPTH_SIZE; depth++)
     {
-        // Iterate through rows
         for (int row = 0; row < ROW_SIZE; row++)
         {
-            // Iterate through columns
             for (int column = 0; column < COLUMN_SIZE; column++)
             {
-                // Print maze
                 maze_grid[depth][row][column] = 1;
             }
         }
@@ -48,7 +47,6 @@ std::string Pathfinder::toString() const
 void Pathfinder::createRandomMaze()
 {
     // Declare variables
-    srand(time(NULL));
     std::string numbers = "01";
 
     // Iterate through depth
@@ -65,6 +63,12 @@ void Pathfinder::createRandomMaze()
             }
         }
     }
+
+    // Set entrance
+    maze_grid[0][0][0] = 1;
+
+    // Set exit
+    maze_grid[4][4][4] = 1;
 }
 
 bool Pathfinder::importMaze(std::string file_name)
@@ -73,6 +77,7 @@ bool Pathfinder::importMaze(std::string file_name)
     std::ifstream file(file_name.c_str());
     std::string line;
     int value;
+    int temp_maze[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE];
 
     // Print status message
     std::cout << "Import maze from " << file_name << std::endl;
@@ -106,17 +111,6 @@ bool Pathfinder::importMaze(std::string file_name)
                 getline(file, line);
             }
         }
-        else
-        {
-            std::cout << "Not a valid file" << std::endl;
-        }
-    }
-    else
-    {
-        // Print error message
-        std::cout << file_name << " failed to open" << std::endl;
-
-        return false;
     }
 
     return true;
@@ -124,6 +118,9 @@ bool Pathfinder::importMaze(std::string file_name)
 
 std::vector<std::string> Pathfinder::solveMaze()
 {
+    // Clear previous solutions
+    solution.clear();
+
     // Call find maze path function
     findMazePath(maze_grid, 0, 0, 0);
 
@@ -205,6 +202,7 @@ bool Pathfinder::checkImport(std::string file_name)
     std::string line;
     int value;
     int count = 0;
+    int temp_grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE];
 
     // If file is open
     if (file.is_open())
@@ -228,20 +226,16 @@ bool Pathfinder::checkImport(std::string file_name)
                     // If there are more than 125 cells
                     if (count >= 125)
                     {
-                        std::cout << "Wrong" << std::endl;
                         return false;
-
-                    
                     }
                     // If value doesn't equal "1" or "0"
-                    else if ((int) value != 0 && (int) value != 1)
+                    else if ((int)value != 0 && (int)value != 1)
                     {
-
-                        std::cout << "Wrong" << std::endl;
                         return false;
-
-                        
                     }
+
+                    // Fill maze
+                    temp_grid[depth][row][column] = value;
 
                     // Increase count
                     count++;
@@ -251,13 +245,12 @@ bool Pathfinder::checkImport(std::string file_name)
             // Skip next line
             getline(file, line);
         }
-    }
-    else
-    {
-        // Print error message
-        std::cout << file_name << " failed to open" << std::endl;
 
-        return false;
+        // If there isn't an entrance and exit
+        if (temp_grid[0][0][0] != 1 && temp_grid[4][4][4] != 1)
+        {
+            return false;
+        }
     }
 
     return true;
