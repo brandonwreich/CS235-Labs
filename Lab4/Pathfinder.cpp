@@ -32,12 +32,20 @@ std::string Pathfinder::toString() const
             {
                 // Print maze
                 ss << maze_grid[depth][row][column];
+
+                if (column < COLUMN_SIZE - 1)
+                {
+                    ss << " ";
+                }
             }
 
             ss << std::endl;
         }
 
-        ss << std::endl;
+        if (depth < DEPTH_SIZE - 1)
+        {
+            ss << std::endl;
+        }
     }
 
     // Return maze
@@ -46,9 +54,6 @@ std::string Pathfinder::toString() const
 
 void Pathfinder::createRandomMaze()
 {
-    // Declare variables
-    std::string numbers = "01";
-
     // Iterate through depth
     for (int depth = 0; depth < DEPTH_SIZE; depth++)
     {
@@ -59,7 +64,7 @@ void Pathfinder::createRandomMaze()
             for (int column = 0; column < COLUMN_SIZE; column++)
             {
                 // Fill maze
-                maze_grid[depth][row][column] = numbers[rand() % numbers.size()];
+                maze_grid[depth][row][column] = rand() % 2;
             }
         }
     }
@@ -102,7 +107,6 @@ bool Pathfinder::importMaze(std::string file_name)
                     {
                         // Fill grid
                         ss >> value;
-                        std::cout << "[" << depth << "][" << row << "][" << column << "]=" << value << std::endl;
                         maze_grid[depth][row][column] = value;
                     }
                 }
@@ -125,11 +129,11 @@ std::vector<std::string> Pathfinder::solveMaze()
     findMazePath(maze_grid, 0, 0, 0);
 
     // Iterate through solution
-    for (auto s : solution)
-    {
-        // Print solution
-        std::cout << s << std::endl;
-    }
+    // for (auto s : solution)
+    // {
+    //     // Print solution
+    //     std::cout << s << std::endl;
+    // }
 
     // Return solution
     return solution;
@@ -138,8 +142,8 @@ std::vector<std::string> Pathfinder::solveMaze()
 bool Pathfinder::findMazePath(int grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE], int depth, int row, int column)
 {
     // Print status
-    std::cout << "Find maze path: [" << depth << "][" << row << "][" << column << "]" << std::endl;
-    std::cout << this->toString();
+    // std::cout << "Find maze path: [" << depth << "][" << row << "][" << column << "]" << std::endl;
+    // std::cout << this->toString();
 
     // If cell is out of bounds
     if (depth < 0 ||
@@ -161,7 +165,7 @@ bool Pathfinder::findMazePath(int grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE], int d
              column == COLUMN_SIZE - 1)
     {
         // Cell is exit
-        grid[depth][row][column] = PATH;
+        //grid[depth][row][column] = OPENING;
 
         // Add to solution
         solution.push_back("(" + to_string(depth) + ", " + to_string(row) + ", " + to_string(column) + ")");
@@ -171,7 +175,7 @@ bool Pathfinder::findMazePath(int grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE], int d
     else
     {
         // Tentatively mark cell on path
-        grid[depth][row][column] = PATH;
+        //grid[depth][row][column] = PATH;
 
         if (findMazePath(grid, depth - 1, row, column) || // up
             findMazePath(grid, depth + 1, row, column) || // down
@@ -183,12 +187,14 @@ bool Pathfinder::findMazePath(int grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE], int d
             // Add to solution
             solution.push_back("(" + to_string(depth) + ", " + to_string(row) + ", " + to_string(column) + ")");
 
+            //grid[depth][row][column] = OPENING;
+
             return true;
         }
         else
         {
             // Dead end
-            grid[depth][row][column] = DEADEND;
+            //grid[depth][row][column] = WALL;
 
             return false;
         }
@@ -220,25 +226,20 @@ bool Pathfinder::checkImport(std::string file_name)
                 // Iterate through columns
                 for (int column = 0; column < COLUMN_SIZE; column++)
                 {
-                    // Fill grid
-                    ss >> value;
-
-                    // If there are more than 125 cells
-                    if (count >= 125)
+                    if (!file.eof())
                     {
-                        return false;
-                    }
-                    // If value doesn't equal "1" or "0"
-                    else if ((int)value != 0 && (int)value != 1)
-                    {
-                        return false;
-                    }
+                        // Fill grid
+                        ss >> value;
 
-                    // Fill maze
-                    temp_grid[depth][row][column] = value;
+                        // If value doesn't equal "1" or "0"
+                        if ((int)value != 0 && (int)value != 1)
+                        {
+                            return false;
+                        }
 
-                    // Increase count
-                    count++;
+                        // Fill maze
+                        temp_grid[depth][row][column] = value;
+                    }
                 }
             }
 
