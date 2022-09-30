@@ -30,7 +30,6 @@ public:
     void createRandomMaze();
     bool importMaze(std::string file_name);
     std::vector<std::string> solveMaze();
-    bool checkImport(std::string file_name);
 
 protected:
     bool findMazePath(int grid[DEPTH_SIZE][ROW_SIZE][COLUMN_SIZE], int depth, int row, int column);
