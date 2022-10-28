@@ -95,7 +95,7 @@ public:
                 current = current->next;
             }
 
-            if(current == tail && current->value == insertionNode) {
+            if(current == tail && current->data == insertionNode) {
                 tail->next = newNode;
                 newNode->next = NULL;
                 tail = newNode;
@@ -138,7 +138,7 @@ public:
             }
 
             if (listSize == 1) {
-                previous == current;
+                previous = current;
             }
 
             tail = previous;
@@ -180,7 +180,7 @@ public:
         Node *current = head;
 
         if(index >= listSize || index < 0) {
-            throw out_of_range;
+            throw out_of_range("Out of range");
         }
 
         for(int i = 0; i < index; i++) {
@@ -215,7 +215,7 @@ public:
     bool checkList(T value) {
         Node* current = head;
 
-        while(current->value != value) {
+        while(current->data != value) {
             if(current->next == NULL) {
                 return false;
             }
