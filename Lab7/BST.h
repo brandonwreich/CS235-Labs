@@ -11,9 +11,9 @@ class BST : public BSTInterface {
 
         NodeInterface * getRootNode() const;
         bool add(int data);
-        bool add_node(Node* n, int value);
+        bool add_node(Node*& n, int value);
         bool remove(int data);
-        bool remove_node(Node* n, int value);
+        bool remove_node(Node*& n, int value);
         void clear();
         void clear_tree(Node* n);
 };

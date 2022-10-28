@@ -9,10 +9,10 @@ NodeInterface * BST::getRootNode() const {
 }
 
 bool BST::add(int data) {
-    add_node(root, data);
+    return add_node(root, data);
 }
 
-bool BST::add_node(Node* n, int value) {
+bool BST::add_node(Node*& n, int value) {
     if(n == NULL) {
         n = new Node(value);
         return true;
@@ -30,10 +30,10 @@ bool BST::add_node(Node* n, int value) {
 }
 
 bool BST::remove(int data) {
-    remove_node(root, data);
+    return remove_node(root, data);
 }
 
-bool BST::remove_node(Node* n, int value) {
+bool BST::remove_node(Node*& n, int value) {
     if (n == NULL)
     {
       return false;
@@ -49,21 +49,23 @@ bool BST::remove_node(Node* n, int value) {
       return remove_node(n->rightChild, value);
     }
 
-    if (n->rightChild == NULL && n->leftChild == NULL) //No next of kin
+    if (n->rightChild == NULL && n->leftChild == NULL)
     {
       delete n;
       n = NULL;
       return true;
     }
 
-    if (n->rightChild == NULL || n->leftChild == NULL) //one child
+    if(n->rightChild == NULL || n->leftChild == NULL)
     {
       Node* temp;
       temp = n->leftChild;
+
       if (n->leftChild == NULL)
       {
         temp = n->rightChild;
       }
+
       delete n;
       n = temp;
       return true;
@@ -77,13 +79,16 @@ bool BST::remove_node(Node* n, int value) {
       temp = temp->rightChild;
     }
 
-	if (n->data != parent->data) {
+	if(n->data != parent->data) {
         parent->rightChild = temp->leftChild;
 	}
-	else parent->leftChild = temp->leftChild;
+	else {
+        parent->leftChild = temp->leftChild;
+    }
 
 	n->data = temp->data;
     delete temp;
+    temp = NULL;
     return true;
 }
 
@@ -109,4 +114,5 @@ void BST::clear_tree(Node* n) {
     }
 
     delete n;
+    n = NULL;
 }
