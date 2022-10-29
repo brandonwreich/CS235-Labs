@@ -1,48 +1,32 @@
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
+#include <array>
 using namespace std;
-
-int search(int sval, vector <int> &svec, int spos) {
-  // Base Cases
-  if(svec[spos] == sval)
-    return spos;
-  if(spos >= svec.size())
-    return -1;
-  // Recursive call with a smaller problem size
-  return search(sval,svec,spos+1);
-}
-
-template<typename Item_Type>
-int binary_search(const std::vector<Item_Type>& items, 
-    int first, int last, const Item_Type& target) {
-  if (first > last)
-    return -1;     // Base case for unsuccessful search.
-  else {
-    int middle = (first + last) / 2;  // Next probe index.
-    if (target == items[middle])
-      return middle;   // Base case for successful search.
-    else if (target < items[middle])
-      return binary_search(items, first, middle - 1, target);
-    else
-      return binary_search(items, middle + 1, last, target);
-  }
-}
 
 int main()
 {
-  vector <int> myvec;
-  
-  int vecsize;
-  cin >> vecsize;
-  // Initialize the vector with random values
-  for(int i = 0; i < vecsize; i++) {
-    int nextval = rand() % vecsize;
-    myvec.push_back(nextval);
+  int numbers[] = {23, 14, 65, 3, 19, 2, 71, 12, 8, 61, 5, 25};
+  int index = 0;
+
+  for (int i = 0; i < 9; i++)
+  {
+    int min = numbers[i];
+
+    for (int j = i + 1; j < 9 - i; j++)
+    {
+      if (numbers[j] < min)
+      {
+        int temp = numbers[i];
+
+        numbers[i] = numbers[j];
+        numbers[j] = temp;
+      }
+    }
   }
-  // Print out the vector values
-  for(auto val : myvec) {
-    cout << val<< " ";
+
+  for (int y = 0; y < 11; y++)
+  {
+    cout << numbers[y] << " ";
   }
-  cout << endl;
 }
